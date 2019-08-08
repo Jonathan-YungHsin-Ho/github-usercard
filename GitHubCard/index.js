@@ -37,7 +37,7 @@ function createSearchbar() {
   return form;
 }
 
-function searchWrapper() {
+function clickSearch() {
   const search = document.querySelector('#search');
 
   search.addEventListener('click', event => {
@@ -47,7 +47,7 @@ function searchWrapper() {
 }
 
 function searchFunc() {
-  let handle = document.querySelector('#inputHandle').value;
+  const handle = document.querySelector('#inputHandle').value;
 
   clearCards();
 
@@ -76,7 +76,7 @@ function clearCards() {
 }
 
 createSearchbar();
-searchWrapper();
+clickSearch();
 
 // axios
 //   .get('https://api.github.com/users/' + handle)
