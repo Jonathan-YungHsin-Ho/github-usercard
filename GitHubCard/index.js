@@ -3,7 +3,12 @@
            https://api.github.com/users/<your name>
 */
 
-axis.get(https://api.github.com/users/jonathan-yunghsin-ho)
+const cards = document.querySelector('.cards');
+
+axios.get('https://api.github.com/users/jonathan-yunghsin-ho').then(myData => {
+  const myCard = createCard(myData.data);
+  cards.append(myCard);
+});
 
 /* Step 2: Inspect and study the data coming back, this is YOUR 
    github info! You will need to understand the structure of this 
@@ -59,21 +64,21 @@ function createCard(obj) {
 
   const name = document.createElement('h3');
   name.classList.add('name');
-  name.src = obj.name;
+  name.textContent = obj.name;
 
   const username = document.createElement('p');
   username.classList.add('username');
-  username.src = obj.login;
+  username.textContent = obj.login;
 
   const location = document.createElement('p');
   location.textContent = `Location: ${obj.location}`;
 
   const profile = document.createElement('p');
-  profile.textContent = `Profile: `
+  profile.textContent = `Profile: `;
 
   const profileLink = document.createElement('a');
   profileLink.href = obj.html_url;
-  profile.textContent = obj.html_url;
+  profileLink.textContent = obj.html_url;
 
   const followers = document.createElement('p');
   followers.textContent = `Followers: ${obj.followers}`;
