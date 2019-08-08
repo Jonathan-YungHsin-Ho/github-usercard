@@ -5,9 +5,10 @@
 
 const cards = document.querySelector('.cards');
 
-function createSearch() {
+function createSearchbar() {
   const form = document.createElement('form');
   form.classList.add('form');
+  form.style.width = '100%';
   form.style.marginBottom = '30px';
   form.style.textAlign = 'center';
 
@@ -28,37 +29,54 @@ function createSearch() {
 
   form.append(input);
   form.append(button);
-  cards.append(form);
+
+  const container = document.querySelector('.container');
+  const cards = document.querySelector('.cards');
+  container.insertBefore(form, cards);
 
   return form;
 }
 
-function search() {
+function searchWrapper() {
   const search = document.querySelector('#search');
 
   search.addEventListener('click', event => {
     event.preventDefault();
-    let handle = document.querySelector('#inputHandle').value;
-    axios
-      .get('https://api.github.com/users/' + handle)
-      .then(response => {
-        cards.append(createCard(response.data));
-        getFollowers(response.data.followers_url);
-      })
-      .catch(err => console.log(err));
-
-    function getFollowers(url) {
-      axios.get(url).then(response => {
-        for (let follower of response.data) {
-          cards.append(createCard(follower));
-        }
-      });
-    }
+    searchFunc();
   });
 }
 
-createSearch();
-search();
+function searchFunc() {
+  let handle = document.querySelector('#inputHandle').value;
+
+  clearCards();
+
+  axios
+    .get('https://api.github.com/users/' + handle)
+    .then(response => {
+      cards.append(createCard(response.data));
+      getFollowers(response.data.followers_url);
+    })
+    .catch(err => console.log(err));
+
+  function getFollowers(url) {
+    axios.get(url).then(response => {
+      for (let follower of response.data) {
+        cards.append(createCard(follower));
+      }
+    });
+  }
+}
+
+function clearCards() {
+  const cards = document.querySelector('.cards');
+  while (cards.firstChild) {
+    cards.removeChild(cards.firstChild);
+  }
+}
+
+createSearchbar();
+searchWrapper();
 
 // axios
 //   .get('https://api.github.com/users/' + handle)
