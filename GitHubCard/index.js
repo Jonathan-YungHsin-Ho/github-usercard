@@ -84,7 +84,16 @@ function createCard(obj) {
   const bio = document.createElement('p');
   bio.textContent = `Bio: ${obj.bio}`;
 
-  
+  card.append(img);
+  card.append(cardInfo);
+  cardInfo.append(name);
+  cardInfo.append(username);
+  cardInfo.append(location);
+  cardInfo.append(profile);
+  profile.append(profileLink);
+  cardInfo.append(followers);
+  cardInfo.append(following);
+  cardInfo.append(bio);
 
   return card;
 }
