@@ -5,23 +5,76 @@
 
 const cards = document.querySelector('.cards');
 
-const handle = 'jonathan-yunghsin-ho';
+function createSearch() {
+  const form = document.createElement('form');
+  form.classList.add('form');
+  form.style.marginBottom = '30px';
+  form.style.textAlign = 'center';
 
-axios
-  .get('https://api.github.com/users/' + handle)
-  .then(response => {
-    cards.append(createCard(response.data));
-    getFollowers(response.data.followers_url);
-  })
-  .catch(err => console.log(err));
+  const input = document.createElement('input');
+  input.type = 'text';
+  input.name = 'inputHandle';
+  input.id = 'inputHandle';
+  input.placeholder = 'Enter a GitHub handle to search for followers';
+  input.style.width = '50%';
+  input.style.padding = '5px';
 
-function getFollowers(url) {
-  axios.get(url).then(response => {
-    for (let follower of response.data) {
-      cards.append(createCard(follower));
+  const button = document.createElement('input');
+  button.type = 'submit';
+  button.value = 'Search';
+  button.style.padding = '5px';
+  button.name = 'search';
+  button.id = 'search';
+
+  form.append(input);
+  form.append(button);
+  cards.append(form);
+
+  return form;
+}
+
+function search() {
+  const search = document.querySelector('#search');
+
+  search.addEventListener('click', event => {
+    event.preventDefault();
+    let handle = document.querySelector('#inputHandle').value;
+    axios
+      .get('https://api.github.com/users/' + handle)
+      .then(response => {
+        cards.append(createCard(response.data));
+        getFollowers(response.data.followers_url);
+      })
+      .catch(err => console.log(err));
+
+    function getFollowers(url) {
+      axios.get(url).then(response => {
+        for (let follower of response.data) {
+          cards.append(createCard(follower));
+        }
+      });
     }
   });
 }
+
+createSearch();
+search();
+
+// axios
+//   .get('https://api.github.com/users/' + handle)
+//   .then(response => {
+//     cards.append(createCard(response.data));
+//     getFollowers(response.data.followers_url);
+//   })
+//   .catch(err => console.log(err));
+
+// function getFollowers(url) {
+//   axios.get(url).then(response => {
+//     for (let follower of response.data) {
+//       cards.append(createCard(follower));
+//     }
+//   });
+// }
 
 /* Step 2: Inspect and study the data coming back, this is YOUR 
    github info! You will need to understand the structure of this 
