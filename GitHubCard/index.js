@@ -31,7 +31,24 @@ axios.get('https://api.github.com/users/jonathan-yunghsin-ho').then(myData => {
           user, and adding that card to the DOM.
 */
 
-const followersArray = [];
+const followersArray = [
+  'brandonharris177',
+  'DanielWallen87',
+  'juarezfrench',
+  'mchrupcala',
+  'Krishan-Nattar',
+  'tetondan',
+  'dustinmyers',
+  'justsml',
+  'bigknell',
+];
+
+followersArray.forEach(handle => {
+  axios.get('https://api.github.com/users/' + handle).then(myData => {
+    const myCard = createCard(myData.data);
+    cards.append(myCard);
+  });
+});
 
 /* Step 3: Create a function that accepts a single object as its only argument,
           Using DOM methods and properties, create a component that will return the following DOM element:
