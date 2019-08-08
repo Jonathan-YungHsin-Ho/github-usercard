@@ -55,15 +55,28 @@ function searchFunc() {
     .get('https://api.github.com/users/' + handle)
     .then(response => {
       cards.append(createCard(response.data));
-      getFollowers(response.data.followers_url);
+      getFollowersB(response.data.followers_url);
     })
     .catch(err => console.log(err));
 
-  function getFollowers(url) {
+  function getFollowersA(url) {
     axios.get(url).then(response => {
       for (let follower of response.data) {
         cards.append(createCard(follower));
       }
+    });
+  }
+
+  function getFollowersB(url) {
+    axios.get(url).then(response => {
+      response.data
+        .map(el => el.login)
+        .forEach(handle =>
+          axios
+            .get('https://api.github.com/users/' + handle)
+            .then(response => cards.append(createCard(response.data)))
+            .catch(err => console.log(err)),
+        );
     });
   }
 }
@@ -77,22 +90,6 @@ function clearCards() {
 
 createSearchbar();
 clickSearch();
-
-// axios
-//   .get('https://api.github.com/users/' + handle)
-//   .then(response => {
-//     cards.append(createCard(response.data));
-//     getFollowers(response.data.followers_url);
-//   })
-//   .catch(err => console.log(err));
-
-// function getFollowers(url) {
-//   axios.get(url).then(response => {
-//     for (let follower of response.data) {
-//       cards.append(createCard(follower));
-//     }
-//   });
-// }
 
 /* Step 2: Inspect and study the data coming back, this is YOUR 
    github info! You will need to understand the structure of this 
@@ -200,6 +197,15 @@ function createCard(obj) {
   cardInfo.append(followers);
   cardInfo.append(following);
   cardInfo.append(bio);
+
+  // const cal = document.createElement('div');
+  // cal.classList.add('calendar');
+  // cal.style.maxWidth = '100%';
+  // const calScript = document.createElement('script');
+  // calScript.textContent = `new GitHubCalendar(".calendar", "${obj.login}")`;
+
+  // card.append(cal);
+  // card.append(calScript);
 
   return card;
 }
